@@ -15,7 +15,7 @@ def second_largest(numbers: list) -> int:
 # NOTE: The first time I asked for feedback, ChatGPT did not provide an alternative code but only some
 # edge cases comment. I had to explicitly ask for ChatGPT to revise the code, so I take that as an exercise well done.
 
-def second_largest(numbers: list) -> int:
+def second_largest_gpt(numbers: list) -> int:
     if not isinstance(numbers, list):
         raise TypeError("Expected list")
     

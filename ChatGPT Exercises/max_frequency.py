@@ -20,7 +20,7 @@ def max_frequency(numbers: list[int] = []):
 # POST FEEDBACK
 # NOTE: ChatGPT forgot it was supposed to return the smallest integer with the highest frequency
 
-def max_frequency(numbers: list) -> int:
+def max_frequency_gpt(numbers: list) -> int:
     if not numbers:
         raise ValueError("Input list cannot be empty")
 

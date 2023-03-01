@@ -9,7 +9,7 @@ def sum_squares_even(numbers: typing.Optional[int]) -> int:
     return sum
 
 # POST FEEDBACK
-def sum_squares_even(numbers: list[int] = []) -> int:
+def sum_squares_even_gpt(numbers: list[int] = []) -> int:
     if not isinstance(numbers, list):
         raise TypeError("Expected a list of integers")
 
