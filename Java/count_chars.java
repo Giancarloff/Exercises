@@ -34,8 +34,7 @@ public class count_chars {
     
 
         Set<Character> objs = charCounts.keySet();
-        Character[] chars = new Character[objs.size()];
-        objs.toArray(chars);
+        Character[] chars = objs.toArray(new Character[objs.size()]);
 
         Arrays.sort(chars);
 
