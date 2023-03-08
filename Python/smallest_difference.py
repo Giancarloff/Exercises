@@ -1,4 +1,4 @@
-from typing import *
+from typing import List, Tuple
 
 def smallest_difference(nums: List[int]) -> Tuple[int, int]:
     diff = max(nums)
@@ -12,10 +12,6 @@ def smallest_difference(nums: List[int]) -> Tuple[int, int]:
             found = (nums[i], nums[i+1])
 
     return found
-
-
-print(smallest_difference([1, 3, 5, 7, 9, 11, 13, 15]))
-                
 
         
 
