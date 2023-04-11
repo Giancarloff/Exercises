@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class count_chars {
+public class countChars {
     
     public static void main(String[] args) {
         Scanner usrScan = new Scanner(System.in);

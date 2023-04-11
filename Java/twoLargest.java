@@ -2,7 +2,7 @@ package Java;
 
 import java.util.Scanner;
 
-public class two_largest {
+public class twoLargest {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 

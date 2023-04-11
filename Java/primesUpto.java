@@ -1,7 +1,7 @@
 package Java;
 import java.util.Scanner;
 
-public class primes_upto {
+public class primesUpto {
 
     public static boolean is_prime(int num) {
 
