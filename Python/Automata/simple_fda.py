@@ -1,11 +1,15 @@
 # This is WIP
 """
 TODO:
-- Explain init parameters
 - Input validation on init
 - Check undefined initial state in transition(); Fixing last item could solve this issue
 - Empty string check in compute()
 - Imp. str and repr
+- Explain init parameters
+
+File-built FDA TODO:
+- Easy way (has all 5 definitions)
+- Transition based (Can have only the transition but will search for other definitions)
 """
 class FDA:
 
@@ -27,7 +31,17 @@ class FDA:
         - Alphabets have to be sets of single characters.\n
         - Transition is a dictionary of tuple keys and string values, think Transition[(q1, s)] = q2.\n
         """
-        self.__states = states
+
+        if states is not None:
+            if states.issubset({}):
+                print("Empty states set given! Using single-element set instead.")
+                self.__states = {1}
+            else:
+                self.__states = states
+        else:
+            print("No states set given! Using single-ement set instead.")
+            self.__states = {1}
+            
         self.__alphabet = alphabet
         self.__transition_function = transition
         self.__initial = initial
@@ -73,8 +87,8 @@ class FDA:
             print("Error at %s: %s not in alphabet!" % self, symbol)
 
     def compute(self, string: str) -> bool:
-        verificator = set(string)
-        if verificator.issubset(self.alphabet):
+        string_as_set = set(string)
+        if string_as_set.issubset(self.alphabet):
             for c in string:
                 self.transition(c)
             return self.current_state in self.accepting_states
