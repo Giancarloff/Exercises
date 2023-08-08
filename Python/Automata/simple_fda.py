@@ -1,11 +1,6 @@
 import random
 # This is WIP
 """
-TODO:
-- Input validation on init
-- Check undefined initial state in transition(); Fixing last item could solve this issue
-- Explain init parameters
-
 File-built FDA TODO:
 - Easy way (has all 5 definitions)
 - Transition based (Can have only the transition but will search for other definitions)
@@ -22,13 +17,19 @@ class FDA:
     q₀ ∈ Q is the initial state.\n
     F ⊆ Q is the set of accepting states.\n
     It recognizes regular languages and processes strings by transitioning between states according to input symbols.\n
+    Note:\n
+        - Alphabets have to be sets of single characters.\n
+        - Transition is a dictionary of tuple keys and string values, think Transition[('q1', s)] = 'q2'.\n
     """
 
     def __init__(self, states: set, alphabet: set, transition: dict, initial_state: object, accepting: set) -> None:
         """
-        Note:\n
-        - Alphabets have to be sets of single characters.\n
-        - Transition is a dictionary of tuple keys and string values, think Transition[(q1, s)] = q2.\n
+        Args:\n
+            states (set): Set of objects representing the states.
+            alphabet (set): Set of chars for the automaton's alphabet.
+            transition (dict): Dictionary representing the transition function t:(q1, s) -> q2.
+            initial_state (object): The initial/entering state for the FDA.
+            accepting (set): Set of accepting states.
         """
 
         # STATES
@@ -73,11 +74,32 @@ class FDA:
             self.__transition_function = generated_transition
 
         # INITIAL STATE
-        self.__initial_state = initial_state
-        self.__current_state = initial_state
+        if initial_state is None:
+            print("No initial state provided! Sampling a random one from states.")
+            sample = random.sample(self.__states, 1)[0]
+            self.__initial_state = sample
+            self.__current_state = sample
+        elif initial_state not in self.__states:
+            print("Initial state is not in the set of states! Sampling another one.")
+            sample = random.sample(self.__states, 1)[0]
+            self.__initial_state = sample
+            self.__current_state = sample
+        else:
+            self.__initial_state = initial_state
+            self.__current_state = initial_state
 
         # ACCEPTING
-        self.__accepting = accepting
+        if accepting is None:
+            print("Accepting state is None! Using random one from states.")
+            sample = random.sample(self.__states, 1)[0]
+            self.__accepting = sample
+        elif accepting not in self.__states:
+            print("Accepting state is not in states set! Using random one.")
+            sample = random.sample(self.__states, 1)[0]
+            self.__accepting = sample
+        else:
+            self.__accepting = accepting
+        
 
     @property
     def states(self) -> set:
