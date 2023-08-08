@@ -1,10 +1,9 @@
+import random
 # This is WIP
 """
 TODO:
 - Input validation on init
 - Check undefined initial state in transition(); Fixing last item could solve this issue
-- Empty string check in compute()
-- Imp. str and repr
 - Explain init parameters
 
 File-built FDA TODO:
@@ -25,29 +24,60 @@ class FDA:
     It recognizes regular languages and processes strings by transitioning between states according to input symbols.\n
     """
 
-    def __init__(self, states: set, alphabet: set, transition: dict, initial: object, accepting: set) -> None:
+    def __init__(self, states: set, alphabet: set, transition: dict, initial_state: object, accepting: set) -> None:
         """
         Note:\n
         - Alphabets have to be sets of single characters.\n
         - Transition is a dictionary of tuple keys and string values, think Transition[(q1, s)] = q2.\n
         """
 
+        # STATES
         if states is not None:
             if states.issubset({}):
-                print("Empty states set given! Using single-element set instead.")
-                self.__states = {1}
+                print("Empty states set given! Using {0} instead.")
+                self.__states = {0}
             else:
                 self.__states = states
         else:
-            print("No states set given! Using single-ement set instead.")
-            self.__states = {1}
-            
-        self.__alphabet = alphabet
-        self.__transition_function = transition
-        self.__initial = initial
-        self.__accepting = accepting
+            print("No states set given! Using {0} instead.")
+            self.__states = {0}
 
-        self.__current_state = initial
+        # ALPHABET
+        if alphabet is not None:
+            if alphabet.issubset({}):
+                print("Empty states set given! Using {'s'} instead.")
+                self.__alphabet = {'s'}
+            else:
+                self.__alphabet = alphabet
+        else:
+            print("No states set given! Using {'s'} instead.")
+            self.__alphabet = {'s'}
+            
+        # TRANSITION FUNCTION
+        if transition is not None:
+            if transition.keys().isdisjoint({}):
+                self.__transition_function = transition
+            else:
+                print("Transition dictionary has no keys! Generating random one.")
+                key = tuple(self.__initial_state, random.sample(self.__alphabet, 1)[0])
+                value = random.sample(self.__states)
+                generated_transition = dict()
+                generated_transition[key] = value
+                self.__transition_function = generated_transition
+        else:
+            print("No transition provided! Generating random one.")
+            key = tuple(self.__initial_state, random.sample(self.__alphabet, 1)[0])
+            value = random.sample(self.__states)
+            generated_transition = dict()
+            generated_transition[key] = value
+            self.__transition_function = generated_transition
+
+        # INITIAL STATE
+        self.__initial_state = initial_state
+        self.__current_state = initial_state
+
+        # ACCEPTING
+        self.__accepting = accepting
 
     @property
     def states(self) -> set:
@@ -59,7 +89,7 @@ class FDA:
 
     @property
     def initial_state(self) -> str:
-        return self.__initial
+        return self.__initial_state
 
     @property
     def accepting_states(self) -> set:
@@ -84,9 +114,16 @@ class FDA:
             else: # Better safe than sorry?
                 print("No idea what is wrong - check better safe than sorry.")
         else:
-            print("Error at %s: %s not in alphabet!" % self, symbol)
+            print(f"Error at {self}: {symbol} not in alphabet!")
 
     def compute(self, string: str) -> bool:
+
+        if string is None or string == "":
+            return self.initial_state in self.accepting_states
+
+        if self.current_state != self.initial_state:
+            self.__current_state = self.__initial_state
+        
         string_as_set = set(string)
         if string_as_set.issubset(self.alphabet):
             for c in string:
@@ -97,7 +134,7 @@ class FDA:
             return False
 
     def __str__(self) -> str:
-        pass
+        return f"({self.states}, {self.alphabet}, {self.transition_function}, {self.initial_state}, {self.accepting_states})"
 
     def __repr__(self) -> str:
-        pass
+        return self.__str__()
