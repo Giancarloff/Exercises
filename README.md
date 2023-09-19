@@ -1,2 +1,1 @@
-# Exercises
-Something to do when on vacation
+Trivia: I like maths but I suck at it
