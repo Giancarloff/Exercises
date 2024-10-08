@@ -22,12 +22,13 @@ class Quaternary:
         self_num = self.number
         
         if self.prefixed:
-            self_num = self_num[1:1:-1]
+            self_num = self_num[-1:1:-1]
+            self_num = self_num[::-1]
             
         self_num = self_num[::-1]
         
         for i, c in enumerate(self_num):
-            int_num += int(c)*(4**i)
+            int_num += int(c)*(Quaternary.b**i)
         
         return int_num
     
@@ -43,27 +44,28 @@ class Quaternary:
 
     def __sub__(self, other):
         if isinstance(other, Quaternary):
-            int_sum = self.to_int() - other.to_int()
-            return Quaternary(int_sum)
-        raise TypeError(f"Invalid type for sub (-) {type(self)} + {type(other)}")
+            int_sub = self.to_int() - other.to_int()
+            return Quaternary(int_sub)
+        raise TypeError(f"Invalid type for sub (-) {type(self)} - {type(other)}")
 
     def __mul__(self, other):
         if isinstance(other, Quaternary):
-            int_sum = self.to_int() * other.to_int()
-            return Quaternary(int_sum)
-        raise TypeError(f"Invalid type for mul (*) {type(self)} + {type(other)}")
+            int_mul = self.to_int() * other.to_int()
+            return Quaternary(int_mul)
+        raise TypeError(f"Invalid type for mul (*) {type(self)} * {type(other)}")
 
     def __truediv__(self, other):
         if isinstance(other, Quaternary):
-            int_sum = self.to_int() / other.to_int()
-            return Quaternary(int_sum)
-        raise TypeError(f"Invalid type for div (/) {type(self)} + {type(other)}")
+            int_div = self.to_int() / other.to_int()
+            return Quaternary(int_div)
+        raise TypeError(f"Invalid type for div (/) {type(self)} / {type(other)}")
     
     def __repr__(self) -> str:
-        return f"{self.number}"
+        return f"({self.number}, {self.prefixed}"
     
     def __str__(self) -> str:
         return f"{self.number}"
+    
 
 
 class Gene:
@@ -75,8 +77,7 @@ class Gene:
     
         
 
-qua = Quaternary(10, True)
-que = Quaternary(11, True)
-sum = qua+que
-print(sum)
+qua = Quaternary(10)
+que = Quaternary(11)
+print(qua+que)
         
