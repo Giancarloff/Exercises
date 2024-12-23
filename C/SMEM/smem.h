@@ -46,8 +46,8 @@ typedef struct SMemSpace {
 } SMemSpace;
 
 /** 
- * FIXME: The current implementation seems badly modeled. I am now considering using static expressions, however
- * they need to be constant.
+ * FIXME: The current implementation seems badly modeled. I am now considering using static variables, however I need
+ * more understanding on how the static keyword functions in C before doing so.
  */
 
 /**
