@@ -26,8 +26,11 @@ int main(void) {
 
     char* hw = "Hello World.";
     printf("Writing %ld bytes to allocated pointer %p.\n", strlen(hw) + 1, ptr);
-    memcpy(ptr, hw, sizeof(hw));
+    memcpy(ptr, hw, strlen(hw) + 1);
     printf("Bytes written:\n\t%s\n", (char*) ptr);
+
+    void* ptr = malloc(10);
+    ptr = realloc(ptr, 20);
 
     alloc_size = true_space_size + 1;
 
@@ -38,7 +41,7 @@ int main(void) {
         printf("Allocation failed. This was expected.\n");
     }
 
-    alloc_size = 20;
+    alloc_size = 100;
     printf("Trying to allocate %d bytes.\n", alloc_size);
     ptr2 = smem_alloc(alloc_size);
 

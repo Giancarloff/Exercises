@@ -5,9 +5,10 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
 
 // For debugging
-#define SMEM_DEBUG
+// #define SMEM_DEBUG
 #ifdef SMEM_DEBUG
     #include <stdio.h>
     #include <unistd.h>
@@ -145,6 +146,7 @@ void* smem_alloc(uint size) {
     void* allocated_pointer = smem_allocation_space.start;
     uint* metadata_pointer = (uint*) smem_metadata_space.start;
     uint metadata_offset = 0;
+    uint allocation_offset = 0;
     SMemBlock current_block = {NALLOC, 0};
     while (metadata_offset < sysconf(_SC_PAGESIZE) - 1) { // I am not sold on this while condition here.
         memcpy(&current_block, metadata_pointer, sizeof(SMemBlock));
@@ -162,7 +164,9 @@ void* smem_alloc(uint size) {
             current_block.status = ALLOC;
             current_block.size = size; 
             memcpy(metadata_pointer, &current_block, sizeof(SMemBlock));
-
+            #ifdef SMEM_DEBUG
+            printf("smem_alloc: the metadata pointer is telling me %d.\n", *metadata_pointer);
+            #endif
             // Split it.
             metadata_pointer++;
             current_block.status = NALLOC;
@@ -171,9 +175,12 @@ void* smem_alloc(uint size) {
             return allocated_pointer;
         }
 
+        allocation_offset += (current_block.size / sizeof(void*)); // 
+        if (allocation_offset > smem_allocation_space.size) {
+            return NULL;
+        }
         // Casting is a sign of good code, right?
-        /** FIXME: Needs to verify if going out of page boundaries in allocation space. */
-        allocated_pointer = (void*) ((char*) allocated_pointer + (current_block.size / sizeof(void*))); // Reminder that size is word-aligned
+        allocated_pointer = (void*) ((char*) allocated_pointer + allocation_offset);
         metadata_pointer++;
         metadata_offset++;
     }
@@ -186,7 +193,68 @@ void* smem_alloc(uint size) {
     return NULL;
 }
 
-void* smem_alloc_zeroes(SMemSpace* space, uint size);
-void* smem_alloc_init(SMemSpace* space, uint size, void* data);
+/**
+ * @brief Allocate size bytes and initialize them with given value.
+ * @param size Amount of bytes to allocate.
+ * @param value Value to initialize bytes. If it is greater than 255, value will be set to 255.
+ * @returns Pointer to the allocated block if successful, NULL otherwise.
+ */
+void* smem_alloc_init(uint size, char value) {
+    if (value > 255) {
+        value = 255;
+    }
+
+    char* ptr = (char*) smem_alloc(size);
+
+    if (ptr == NULL) {
+        return NULL;
+    }
+
+    for (uint i = 0; i < size; i++) {
+        ptr[i] = value;
+    }
+}
+
+/**
+ * @brief Allocate size bytes and initialize them with zero (0).
+ * @param size Amount of bytes to allocate.
+ * @returns Pointer to the allocated block if successful, NULL otherwise.
+ */
+void* smem_alloc_zeroes(uint size) {
+    return smem_alloc_init(size, 0);
+    /**
+     * NOTE: This function is almost redundant, since mmap() initialize pages with zero. However,
+     * free's followed by mallocs may result in garbage present in the memory blocks, so there is at least
+     * one use case.
+     */
+}
+
+/**
+ * @brief Allocate size bytes and copy data over. Keep in mind only 'size' bytes will be copied.
+ * @param size Amount of bytes to allocate.
+ * @param data Pointer to data that will be copied over.
+ * @returns Pointer to the allocated block if successful, NULL otherwise.
+ */
+void* smem_alloc_copy(uint size, void* data) {
+    void* ptr = smem_alloc(size);
+
+    if (ptr == NULL) {
+        return NULL;
+    }
+
+    memcpy(ptr, data, size);
+    return ptr;
+}
+
+/**
+ * TODO: Implement. Note we might end up returning the same pointer if there is free space continuous to it.
+ */
+void* smem_realloc();
+
+/**
+ * TODO: Implement
+ */
+void smem_free(void* block);
+
 
 #endif
