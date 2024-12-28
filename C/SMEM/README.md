@@ -1,6 +1,6 @@
 # Simple Memory Management (SMeM)
 
-#### I asked for ChatGPT to give me an exercise to do in C and one of the suggestions was implementing a custom memory allocator. The file `smem.h` resulted from this. Specifically, the exercise asked for:
+#### I asked for ChatGPT to give me an exercise to do in C and one of the suggestions was implementing a custom memory allocator. The file `smem.h` and `smem.c` resulted from this. Specifically, the exercise asked for:
 ##### `1. malloc`
 ##### `2. free`
 ##### `3. realloc`

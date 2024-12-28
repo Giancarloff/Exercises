@@ -29,9 +29,6 @@ int main(void) {
     memcpy(ptr, hw, strlen(hw) + 1);
     printf("Bytes written:\n\t%s\n", (char*) ptr);
 
-    void* ptr = malloc(10);
-    ptr = realloc(ptr, 20);
-
     alloc_size = true_space_size + 1;
 
     printf("Trying to allocate %d bytes.\n", alloc_size);
@@ -48,6 +45,27 @@ int main(void) {
     if (ptr2 == NULL) {
         printf("Error: Allocation failed. Expected success.\n");
         return EXIT_FAILURE;
+    }
+
+    printf("Freeing pointer %p.\n", ptr);
+    if (smem_free(ptr) == 0) {
+        printf("Free successful.\n");
+    } else {
+        printf("Free failed!!\n");
+    }
+
+    printf("Freeing pointer %p.\n", ptr2);
+    if (smem_free(ptr2) == 0) {
+        printf("Free successful.\n");
+    } else {
+        printf("Free failed!!\n");
+    }
+
+    printf("Trying to double free pointer %p.\n", ptr);
+    if (smem_free(ptr) == -1) {
+        printf("Free failed. This was expected.\n");
+    } else {
+        printf("Free succeeded!!\n");
     }
 
     printf("Bequeathing space.\n");
