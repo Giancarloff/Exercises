@@ -19,7 +19,7 @@ C_OBJECTS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(C_SOURCES))
 OBJECTS = $(CPP_OBJECTS) $(C_OBJECTS)
 
 # Target
-TARGET = $(BIN_DIR)/smem
+TARGET = $(BIN_DIR)/tmac
 
 # Rules
 all: $(TARGET)
