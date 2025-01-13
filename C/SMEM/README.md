@@ -7,5 +7,5 @@
 #### Which became respectively:
 ##### `1. smem_malloc`
 ##### `2. smem_free`
-##### `3. smem_realloc`
-#### ChatGPT suggested I used `mmap` to get things started. While that facilitated more than I expected, it still allowed me to practice some C after years of not doing anything in the language. I think it was decent enough for a "coming back" exercise.
+##### `3. smem_realloc` (not implemented)
+#### ChatGPT suggested I used `mmap` to get things started. While that facilitated more than I expected, it still allowed me to practice some C after years of not doing anything in the language. I think it was decent enough for a "coming back" exercise. Right now I have no plans of coming back to this.

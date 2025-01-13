@@ -87,7 +87,7 @@ void* smem_alloc(uint size) {
     // TODO: Maybe there is a better way to align size to 4 bytes
     size = size % 4 == 0 ? size : size + (4 - size % 4);
     
-    if (size > smem_allocation_space.size || 2147483647 < size ) { // No can do sizes greater than 2^31 - 1.
+    if (size > smem_allocation_space.size || (1 << 31) - 1 < size ) { // No can do sizes greater than 2^31 - 1.
         return NULL;
     }
     
